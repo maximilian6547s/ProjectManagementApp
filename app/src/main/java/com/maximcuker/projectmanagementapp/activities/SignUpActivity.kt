@@ -1,6 +1,5 @@
 package com.maximcuker.projectmanagementapp.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.WindowManager
@@ -37,8 +36,8 @@ class SignUpActivity : BaseActivity() {
 
     private fun registerUser() {
         val name: String = et_name.text.toString().trim { it <= ' ' }
-        val email: String = et_email.text.toString().trim { it <= ' ' }
-        val password: String = et_password.text.toString().trim { it <= ' ' }
+        val email: String = et_email_sign_in.text.toString().trim { it <= ' ' }
+        val password: String = et_password_sign_in.text.toString().trim { it <= ' ' }
 
         if (validateForm(name, email, password)) {
             //Toast.makeText(this, "We can register a new user", Toast.LENGTH_LONG).show()
