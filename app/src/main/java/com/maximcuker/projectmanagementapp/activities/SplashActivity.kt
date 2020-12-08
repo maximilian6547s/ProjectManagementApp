@@ -1,4 +1,4 @@
-package com.maximcuker.projectmanagementapp
+package com.maximcuker.projectmanagementapp.activities
 
 import android.content.Intent
 import android.graphics.Typeface
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.WindowManager
+import com.maximcuker.projectmanagementapp.R
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
