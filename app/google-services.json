@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "476142085283",
+    "project_id": "projectmanagementapp-d530f",
+    "storage_bucket": "projectmanagementapp-d530f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476142085283:android:968a95bb4dd23b442c0b16",
+        "android_client_info": {
+          "package_name": "com.maximcuker.projectmanagementapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "476142085283-4ilgrp1mieqp4vhonams49gedu5p040v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8W0gluaLpZ5sn77O_V0OAX2-8FkhSpzk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "476142085283-4ilgrp1mieqp4vhonams49gedu5p040v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
