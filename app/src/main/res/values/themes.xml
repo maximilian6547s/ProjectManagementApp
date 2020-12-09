@@ -20,4 +20,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Theme.ProjectManagementApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    </style>
+
+    <style name="Theme.ProjectManagementApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+
+    </style>
+
 </resources>
