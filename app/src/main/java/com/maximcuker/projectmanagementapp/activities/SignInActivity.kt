@@ -10,6 +10,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.maximcuker.projectmanagementapp.R
+import com.maximcuker.projectmanagementapp.firebase.FirestoreClass
+import com.maximcuker.projectmanagementapp.models.User
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class SignInActivity : BaseActivity() {
@@ -31,6 +33,12 @@ class SignInActivity : BaseActivity() {
         }
     }
 
+    fun signInSuccess(user:User) {
+        hideProgressDialog()
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
     private fun signInRegisteredUser() {
         val email: String = et_email_sign_in.text.toString().trim { it <= ' ' }
         val password: String = et_password_sign_in.text.toString().trim { it <= ' ' }
@@ -48,7 +56,7 @@ class SignInActivity : BaseActivity() {
                             "you have successfully signed in the email address $registeredEmail",
                             Toast.LENGTH_LONG
                         ).show()
-                        startActivity(Intent(this, MainActivity::class.java))
+                        FirestoreClass().signInUser(this)
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(
