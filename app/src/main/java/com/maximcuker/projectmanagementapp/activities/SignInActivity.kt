@@ -48,14 +48,6 @@ class SignInActivity : BaseActivity() {
                 .addOnCompleteListener(this) { task ->
                     hideProgressDialog()
                     if (task.isSuccessful) {
-                        val firebaseUser: FirebaseUser? = task.result?.user
-                        val registeredEmail = firebaseUser?.email
-                        // Sign in success, update UI with the signed-in user's information
-                        Toast.makeText(
-                            this,
-                            "you have successfully signed in the email address $registeredEmail",
-                            Toast.LENGTH_LONG
-                        ).show()
                         FirestoreClass().signInUser(this)
                     } else {
                         // If sign in fails, display a message to the user.
