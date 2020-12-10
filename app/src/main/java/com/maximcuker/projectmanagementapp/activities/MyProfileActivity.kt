@@ -1,17 +1,20 @@
 package com.maximcuker.projectmanagementapp.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.bumptech.glide.Glide
 import com.maximcuker.projectmanagementapp.R
+import com.maximcuker.projectmanagementapp.firebase.FirestoreClass
+import com.maximcuker.projectmanagementapp.models.User
 import kotlinx.android.synthetic.main.activity_my_profile.*
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.app_bar_main.toolbar_main_activity
 
 class MyProfileActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_profile)
+
         setupActionBar()
+
+        FirestoreClass().loadUserData(this)
     }
 
     private fun setupActionBar() {
@@ -24,6 +27,15 @@ class MyProfileActivity : BaseActivity() {
         }
         toolbar_my_profile_activity.setNavigationOnClickListener {
             onBackPressed()
+        }
+    }
+
+    fun setUserDataInUI(user:User) {
+        Glide.with(this).load(user.image).centerCrop().placeholder(R.drawable.ic_user_place_holder).into(iv_user_image)
+        et_name.setText(user.name)
+        et_email.setText(user.email)
+        if (user.mobile != 0L) {
+            et_mobile.setText(user.mobile.toString())
         }
     }
 }

@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.maximcuker.projectmanagementapp.activities.MainActivity
+import com.maximcuker.projectmanagementapp.activities.MyProfileActivity
 import com.maximcuker.projectmanagementapp.activities.SignInActivity
 import com.maximcuker.projectmanagementapp.activities.SignUpActivity
 import com.maximcuker.projectmanagementapp.models.User
@@ -27,7 +28,7 @@ class FirestoreClass {
             }
     }
 
-    fun signInUser(activity: Activity) {
+    fun loadUserData(activity: Activity) {
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId()!!)
             .get()
@@ -39,9 +40,10 @@ class FirestoreClass {
                         is MainActivity -> {
                             activity.updateNavigationUserDetails(loggedInUser)
                         }
+                        is MyProfileActivity -> {
+                            activity.setUserDataInUI(loggedInUser)
+                        }
                     }
-
-
                 }
             }.addOnFailureListener {e->
                 when(activity) {
