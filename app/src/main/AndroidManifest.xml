@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectManagementApp">
-        <activity android:name=".activities.MyProfileActivity"
+        <activity android:name=".activities.CreateBoardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ProjectManagementApp.NoActionBar" />
+        <activity
+            android:name=".activities.MyProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ProjectManagementApp.NoActionBar" />
         <activity android:name=".activities.BaseActivity" />
