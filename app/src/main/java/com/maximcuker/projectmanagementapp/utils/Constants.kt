@@ -7,14 +7,15 @@ import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import com.maximcuker.projectmanagementapp.activities.MyProfileActivity
 
-object Constants{
+object Constants {
 
-    const val USERS:String = "users"
-    const val BOARDS:String = "boards"
+    const val USERS: String = "users"
+    const val BOARDS: String = "boards"
 
-    const val IMAGE:String = "image"
-    const val NAME:String = "name"
-    const val MOBILE:String = "mobile"
+    const val IMAGE: String = "image"
+    const val NAME: String = "name"
+    const val MOBILE: String = "mobile"
+    const val ASSIGNED_TO: String = "assignedTo"
     const val PICK_IMAGE_REQUEST_CODE = 2
     const val READ_STORAGE_PERMISSION_CODE = 1
 
@@ -24,8 +25,9 @@ object Constants{
         activity.startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)
     }
 
-    fun getFileExtension(activity: Activity,uri: Uri?): String? {
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(activity.contentResolver.getType(uri!!))
+    fun getFileExtension(activity: Activity, uri: Uri?): String? {
+        return MimeTypeMap.getSingleton()
+            .getExtensionFromMimeType(activity.contentResolver.getType(uri!!))
     }
 
 }
