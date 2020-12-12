@@ -24,10 +24,6 @@ import java.io.IOException
 
 class MyProfileActivity : BaseActivity() {
 
-    companion object {
-        private const val READ_STORAGE_PERMISSION_CODE = 1
-        private const val PICK_IMAGE_REQUEST_CODE = 2
-    }
 
     private var mSelectedImageFileURI:Uri? = null
     private lateinit var mUserDetails:User
@@ -43,9 +39,9 @@ class MyProfileActivity : BaseActivity() {
 
         iv_profile_user_image.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                showImageChooser()
+                Constants.showImageChooser(this)
             } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), READ_STORAGE_PERMISSION_CODE)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Constants.READ_STORAGE_PERMISSION_CODE)
             }
         }
 
@@ -65,23 +61,19 @@ class MyProfileActivity : BaseActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == READ_STORAGE_PERMISSION_CODE) {
+        if (requestCode == Constants.READ_STORAGE_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                showImageChooser()
+                Constants.showImageChooser(this)
             }
         } else {
             Toast.makeText(this, "You just denied the permission for storage. You can allow it from settings.", Toast.LENGTH_LONG).show()
         }
     }
 
-    private fun showImageChooser() {
-        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_REQUEST_CODE && data?.data != null) {
+        if (resultCode == Activity.RESULT_OK && requestCode == Constants.PICK_IMAGE_REQUEST_CODE && data?.data != null) {
             mSelectedImageFileURI = data.data
             try {
                 Glide.with(this).load(mSelectedImageFileURI).centerCrop().placeholder(R.drawable.ic_user_place_holder).into(iv_profile_user_image)
@@ -138,7 +130,7 @@ class MyProfileActivity : BaseActivity() {
     private fun uploadUserImage() {
         showProgressDialog(resources.getString(R.string.please_wait))
         if(mSelectedImageFileURI != null) {
-            val sRef:StorageReference = FirebaseStorage.getInstance().reference.child("USER_IMAGE" + System.currentTimeMillis() + "." + getFileExtension(mSelectedImageFileURI))
+            val sRef:StorageReference = FirebaseStorage.getInstance().reference.child("USER_IMAGE" + System.currentTimeMillis() + "." + Constants.getFileExtension(this,mSelectedImageFileURI))
             sRef.putFile(mSelectedImageFileURI!!).addOnSuccessListener {
                 taskSnapshot-> Log.i("Firebase image URL", taskSnapshot.metadata?.reference?.downloadUrl.toString())
                 taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener {
@@ -155,10 +147,6 @@ class MyProfileActivity : BaseActivity() {
                 hideProgressDialog()
             }
         }
-    }
-
-    private fun getFileExtension(uri:Uri?): String? {
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
     }
 
     fun profileUpdateSuccess() {
