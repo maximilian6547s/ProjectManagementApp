@@ -6,10 +6,8 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.maximcuker.projectmanagementapp.activities.MainActivity
-import com.maximcuker.projectmanagementapp.activities.MyProfileActivity
-import com.maximcuker.projectmanagementapp.activities.SignInActivity
-import com.maximcuker.projectmanagementapp.activities.SignUpActivity
+import com.maximcuker.projectmanagementapp.activities.*
+import com.maximcuker.projectmanagementapp.models.Board
 import com.maximcuker.projectmanagementapp.models.User
 import com.maximcuker.projectmanagementapp.utils.Constants
 
@@ -25,7 +23,22 @@ class FirestoreClass {
             .addOnSuccessListener {
                 activity.userRegisteredSuccess()
             }.addOnFailureListener { e ->
+                activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName, "Error writing document")
+            }
+    }
+
+    fun createBoard(activity: CreateBoardActivity, boardInfo:Board) {
+        mFireStore.collection(Constants.BOARDS)
+            .document()
+            .set(boardInfo, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.i(activity.javaClass.simpleName, "Board created successfully")
+                Toast.makeText(activity, "Board created successfully", Toast.LENGTH_LONG).show()
+                activity.boardCreatedSuccessfully()
+            }.addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, e.message)
             }
     }
 
