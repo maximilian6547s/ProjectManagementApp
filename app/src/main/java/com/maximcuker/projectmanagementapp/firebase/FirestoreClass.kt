@@ -28,6 +28,19 @@ class FirestoreClass {
             }
     }
 
+    fun getBoardDetails(activity: TaskListActivity, documentId:String) {
+        mFireStore.collection(Constants.BOARDS)
+            .document(documentId)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.i(activity.javaClass.simpleName, document.toString())
+                activity.boardDetails(document.toObject(Board::class.java))
+            }.addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, e.message)
+            }
+    }
+
     fun createBoard(activity: CreateBoardActivity, boardInfo:Board) {
         mFireStore.collection(Constants.BOARDS)
             .document()
