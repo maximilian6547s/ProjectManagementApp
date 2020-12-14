@@ -40,6 +40,10 @@ open class BoardItemsAdapter(
     interface OnClickListener {
         fun onClick(position: Int, model: Board)
     }
+
+    fun setOnclickListener(onClickListener: OnClickListener) {
+        this.onClickListener = onClickListener
+    }
     override fun getItemCount(): Int {
         return list.size
     }
