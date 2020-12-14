@@ -1,9 +1,12 @@
 package com.maximcuker.projectmanagementapp.activities
 
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.maximcuker.projectmanagementapp.R
+import com.maximcuker.projectmanagementapp.adapters.TaskListItemsAdapter
 import com.maximcuker.projectmanagementapp.firebase.FirestoreClass
 import com.maximcuker.projectmanagementapp.models.Board
+import com.maximcuker.projectmanagementapp.models.Task
 import com.maximcuker.projectmanagementapp.utils.Constants
 import kotlinx.android.synthetic.main.activity_task_list.*
 
@@ -37,6 +40,16 @@ class TaskListActivity : BaseActivity() {
         hideProgressDialog()
         if (board != null) {
             setupActionBar(board.name)
+
+            val addTaskList = Task(resources.getString(R.string.add_list))
+            board.taskList.add(addTaskList)
+
+            rv_task_list.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+
+            rv_task_list.setHasFixedSize(true)
+
+            val adapter = TaskListItemsAdapter(this, board.taskList)
+            rv_task_list.adapter = adapter
         }
     }
 
