@@ -20,6 +20,7 @@ object Constants {
     const val READ_STORAGE_PERMISSION_CODE = 1
     const val DOCUMENT_ID = "documentId"
     const val TASK_LIST = "taskList"
+    const val BOARD_DETAIL = "board_detail"
 
 
     fun showImageChooser(activity: Activity) {
