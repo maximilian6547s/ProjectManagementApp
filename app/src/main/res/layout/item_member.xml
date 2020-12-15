@@ -33,7 +33,7 @@
                 android:id="@+id/tv_member_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/primary_text_color"
+                android:textColor="@color/black"
                 android:textSize="@dimen/item_member_name_text_size"
                 tools:text="Member Name" />
 
@@ -41,7 +41,7 @@
                 android:id="@+id/tv_member_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondary_text_color"
+                android:textColor="@color/black"
                 android:textSize="@dimen/item_member_email_text_size"
                 tools:text="Email" />
         </LinearLayout>
