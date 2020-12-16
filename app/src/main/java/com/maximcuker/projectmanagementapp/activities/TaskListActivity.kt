@@ -63,6 +63,10 @@ class TaskListActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    fun cardDetails(taskListPosition:Int, cardPosition:Int) {
+        startActivity(Intent(this, CardDetailsActivity::class.java))
+    }
+
     private fun setupActionBar() {
         setSupportActionBar(toolbar_task_list_activity)
         val actionBar = supportActionBar
