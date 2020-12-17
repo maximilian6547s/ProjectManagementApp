@@ -8,7 +8,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.maximcuker.projectmanagementapp.R
 import com.maximcuker.projectmanagementapp.adapters.LabelColorListItemsAdapter
-import kotlinx.android.synthetic.main.dialog_color_list.view.*
+import kotlinx.android.synthetic.main.dialog_list.view.*
 
 abstract class LabelColorListDialog(
     context: Context,
@@ -21,7 +21,7 @@ abstract class LabelColorListDialog(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val view = LayoutInflater.from(context).inflate(R.layout.dialog_color_list,null)
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_list,null)
 
         setContentView(view)
         setCanceledOnTouchOutside(true)

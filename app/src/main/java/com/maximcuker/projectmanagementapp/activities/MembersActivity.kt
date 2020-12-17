@@ -2,21 +2,18 @@ package com.maximcuker.projectmanagementapp.activities
 
 import android.app.Activity
 import android.app.Dialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.maximcuker.projectmanagementapp.R
-import com.maximcuker.projectmanagementapp.adapters.MembersListItemAdapter
+import com.maximcuker.projectmanagementapp.adapters.MemberListItemsAdapter
 import com.maximcuker.projectmanagementapp.firebase.FirestoreClass
 import com.maximcuker.projectmanagementapp.models.Board
 import com.maximcuker.projectmanagementapp.models.User
 import com.maximcuker.projectmanagementapp.utils.Constants
 import kotlinx.android.synthetic.main.activity_members.*
-import kotlinx.android.synthetic.main.activity_my_profile.*
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.dialog_search_member.*
 
 class MembersActivity : BaseActivity() {
@@ -45,7 +42,7 @@ class MembersActivity : BaseActivity() {
         rv_members_list.layoutManager = LinearLayoutManager(this)
         rv_members_list.setHasFixedSize(true)
 
-        val adapter = MembersListItemAdapter(this,list)
+        val adapter = MemberListItemsAdapter(this,list)
         rv_members_list.adapter = adapter
 
     }

@@ -13,6 +13,7 @@ import com.maximcuker.projectmanagementapp.firebase.FirestoreClass
 import com.maximcuker.projectmanagementapp.models.Board
 import com.maximcuker.projectmanagementapp.models.Card
 import com.maximcuker.projectmanagementapp.models.Task
+import com.maximcuker.projectmanagementapp.models.User
 import com.maximcuker.projectmanagementapp.utils.Constants
 import kotlinx.android.synthetic.main.activity_task_list.*
 
@@ -25,6 +26,7 @@ class TaskListActivity : BaseActivity() {
 
     private lateinit var mBoardDetails:Board
     private lateinit var mBoardDocumentId: String
+    private lateinit var mAssignedMembersDetailList: ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +71,7 @@ class TaskListActivity : BaseActivity() {
         intent.putExtra(Constants.BOARD_DETAIL,mBoardDetails)
         intent.putExtra(Constants.TASK_LIST_ITEM_POSITION,taskListPosition)
         intent.putExtra(Constants.CARD_LIST_ITEM_POSITION,cardPosition)
+        intent.putExtra(Constants.BOARD_MEMBERS_LIST,mAssignedMembersDetailList)
         startActivityForResult(intent, CARD_DETAIL_REQUEST_CODE)
     }
 
@@ -100,6 +103,9 @@ class TaskListActivity : BaseActivity() {
 
             val adapter = TaskListItemsAdapter(this, board.taskList)
             rv_task_list.adapter = adapter
+
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FirestoreClass().getAssignedMembersListDetails(this, mBoardDetails.assignedTo)
         }
     }
 
@@ -154,6 +160,12 @@ class TaskListActivity : BaseActivity() {
         FirestoreClass().addUpdateTaskList(this,mBoardDetails)
 
     }
+
+    fun boardMembersDetailsList(list: ArrayList<User>) {
+        mAssignedMembersDetailList = list
+        hideProgressDialog()
+    }
+
 
     private fun removeLastElementOFTaskList() {
         mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)

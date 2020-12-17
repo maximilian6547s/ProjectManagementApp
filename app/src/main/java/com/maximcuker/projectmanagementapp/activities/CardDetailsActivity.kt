@@ -3,25 +3,26 @@ package com.maximcuker.projectmanagementapp.activities
 import android.app.Activity
 import android.app.AlertDialog
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.maximcuker.projectmanagementapp.R
 import com.maximcuker.projectmanagementapp.dialogs.LabelColorListDialog
+import com.maximcuker.projectmanagementapp.dialogs.MembersListDialog
 import com.maximcuker.projectmanagementapp.firebase.FirestoreClass
 import com.maximcuker.projectmanagementapp.models.Board
 import com.maximcuker.projectmanagementapp.models.Card
 import com.maximcuker.projectmanagementapp.models.Task
+import com.maximcuker.projectmanagementapp.models.User
 import com.maximcuker.projectmanagementapp.utils.Constants
 import kotlinx.android.synthetic.main.activity_card_detail.*
-import kotlinx.android.synthetic.main.activity_members.*
 
 class CardDetailsActivity : BaseActivity() {
 
     private var mSelectedColor: String = ""
     private lateinit var mBoardDetails: Board
+    private lateinit var mMembersDetailList: ArrayList<User>
     private var mTaskListPosition = -1
     private var mCardPosition = -1
 
@@ -50,6 +51,10 @@ class CardDetailsActivity : BaseActivity() {
         tv_select_label_color.setOnClickListener {
             labelColorsListDialog()
         }
+
+        tv_select_members.setOnClickListener {
+            membersListDialog()
+        }
     }
 
     private fun setColor() {
@@ -58,12 +63,12 @@ class CardDetailsActivity : BaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_delete_card,menu)
+        menuInflater.inflate(R.menu.menu_delete_card, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.action_delete_card -> {
                 alertDialogForDeleteCard(mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].name)
                 return true
@@ -93,17 +98,49 @@ class CardDetailsActivity : BaseActivity() {
             mBoardDetails = intent.getParcelableExtra(Constants.BOARD_DETAIL)
         }
         if (intent.hasExtra(Constants.TASK_LIST_ITEM_POSITION)) {
-            mTaskListPosition = intent.getIntExtra(Constants.TASK_LIST_ITEM_POSITION,-1)
+            mTaskListPosition = intent.getIntExtra(Constants.TASK_LIST_ITEM_POSITION, -1)
         }
         if (intent.hasExtra(Constants.CARD_LIST_ITEM_POSITION)) {
-            mCardPosition = intent.getIntExtra(Constants.CARD_LIST_ITEM_POSITION,-1)
+            mCardPosition = intent.getIntExtra(Constants.CARD_LIST_ITEM_POSITION, -1)
+        }
+        if (intent.hasExtra(Constants.BOARD_MEMBERS_LIST)) {
+            mMembersDetailList = intent.getParcelableArrayListExtra(Constants.BOARD_MEMBERS_LIST)
         }
     }
 
-    fun addUpdateTaskListSuccess(){
+    fun addUpdateTaskListSuccess() {
         hideProgressDialog()
         setResult(Activity.RESULT_OK)
         finish()
+    }
+
+    private fun membersListDialog() {
+        var cardAssignedMembersList =
+            mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo
+        if (cardAssignedMembersList.size > 0) {
+            for (i in mMembersDetailList.indices) {
+                for (j in cardAssignedMembersList) {
+                    if (mMembersDetailList[i].id == j) {
+                        mMembersDetailList[i].selected = true
+                    }
+                }
+            }
+        } else {
+            for (i in mMembersDetailList.indices) {
+                mMembersDetailList[i].selected = false
+            }
+        }
+
+        val listDialog = object : MembersListDialog(
+            this,
+            mMembersDetailList,
+            resources.getString(R.string.str_select_member)
+        ) {
+            override fun onItemSelected(user: User, action: String) {
+                //TODO("Not yet implemented")
+            }
+        }
+        listDialog.show()
     }
 
     private fun updateCardDetails() {
@@ -113,21 +150,24 @@ class CardDetailsActivity : BaseActivity() {
             mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo,
             mSelectedColor
         )
+
+        val taskList: ArrayList<Task> = mBoardDetails.taskList
+        taskList.removeAt(taskList.size - 1)
+
         mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition] = card
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().addUpdateTaskList(this, mBoardDetails)
     }
 
     private fun deleteCard() {
-        val cardsList:ArrayList<Card> = mBoardDetails.taskList[mTaskListPosition].cards
+        val cardsList: ArrayList<Card> = mBoardDetails.taskList[mTaskListPosition].cards
         cardsList.removeAt(mCardPosition)
-        val taskList:ArrayList<Task> = mBoardDetails.taskList
+        val taskList: ArrayList<Task> = mBoardDetails.taskList
         taskList.removeAt(taskList.size - 1)
         taskList[mTaskListPosition].cards = cardsList
 
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().addUpdateTaskList(this, mBoardDetails)
-
     }
 
     private fun alertDialogForDeleteCard(cardName: String) {
@@ -157,7 +197,12 @@ class CardDetailsActivity : BaseActivity() {
     private fun labelColorsListDialog() {
         val colorList: ArrayList<String> = Constants.colorsList()
 
-        val listDialog = object: LabelColorListDialog(this, colorList, resources.getString(R.string.str_select_label_color),mSelectedColor){
+        val listDialog = object : LabelColorListDialog(
+            this,
+            colorList,
+            resources.getString(R.string.str_select_label_color),
+            mSelectedColor
+        ) {
             override fun onItemSelected(color: String) {
                 mSelectedColor = color
                 setColor()
