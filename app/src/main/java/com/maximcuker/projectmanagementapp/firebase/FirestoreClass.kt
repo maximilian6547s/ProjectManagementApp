@@ -9,6 +9,7 @@ import com.google.firebase.firestore.SetOptions
 import com.maximcuker.projectmanagementapp.R
 import com.maximcuker.projectmanagementapp.activities.*
 import com.maximcuker.projectmanagementapp.models.Board
+import com.maximcuker.projectmanagementapp.models.Card
 import com.maximcuker.projectmanagementapp.models.User
 import com.maximcuker.projectmanagementapp.utils.Constants
 
@@ -83,15 +84,23 @@ class FirestoreClass {
         }
     }
 
-    fun addUpdateTaskList(activity: TaskListActivity, board: Board) {
+    fun addUpdateTaskList(activity: Activity, board: Board) {
         val taskListHashMap = HashMap<String, Any>()
         taskListHashMap[Constants.TASK_LIST] = board.taskList
         mFireStore.collection(Constants.BOARDS).document(board.documentId).update(taskListHashMap).addOnSuccessListener {
             Log.i(activity.javaClass.simpleName, "TaskList updated successfully")
-            activity.addUpdateTaskListSuccess()
+            if (activity is TaskListActivity) {
+                activity.addUpdateTaskListSuccess()
+            } else if (activity is CardDetailsActivity) {
+                activity.addUpdateTaskListSuccess()
+            }
         }.addOnFailureListener {
             exception->
-            activity.hideProgressDialog()
+            if (activity is TaskListActivity) {
+                activity.hideProgressDialog()
+            } else if (activity is CardDetailsActivity) {
+                activity.hideProgressDialog()
+            }
             Log.e(activity.javaClass.simpleName, "Error while creating a board", exception)
         }
     }
