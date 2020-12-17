@@ -2,6 +2,8 @@ package com.maximcuker.projectmanagementapp.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import com.maximcuker.projectmanagementapp.R
 import com.maximcuker.projectmanagementapp.models.Board
 import com.maximcuker.projectmanagementapp.utils.Constants
@@ -19,6 +21,18 @@ class CardDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_card_detail)
         getIntentData()
         setupActionBar()
+
+        et_name_card_details.setText(mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].name)
+        et_name_card_details.setSelection(et_name_card_details.text.toString().length)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_delete_card,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupActionBar() {
