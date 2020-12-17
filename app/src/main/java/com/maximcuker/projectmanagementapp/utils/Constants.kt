@@ -23,6 +23,8 @@ object Constants {
     const val BOARD_DETAIL = "board_detail"
     const val ID = "id"
     const val EMAIL = "email"
+    const val TASK_LIST_ITEM_POSITION = "task_list_item_position"
+    const val CARD_LIST_ITEM_POSITION = "card_list_item_position"
 
 
     fun showImageChooser(activity: Activity) {
