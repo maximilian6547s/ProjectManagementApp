@@ -2,7 +2,7 @@ package com.maximcuker.projectmanagementapp.models
 
 import android.os.Parcel
 import android.os.Parcelable
-
+//TODO refactor to delete all "!!" in all code
 data class Card(
     val name: String = "",
     val createdBy: String = "",
@@ -21,7 +21,7 @@ data class Card(
         parcel.writeString(name)
         parcel.writeString(createdBy)
         parcel.writeStringList(assignedTo)
-        parcel.writeString(createdBy)
+        parcel.writeString(labelColor)
     }
 
     override fun describeContents(): Int {
