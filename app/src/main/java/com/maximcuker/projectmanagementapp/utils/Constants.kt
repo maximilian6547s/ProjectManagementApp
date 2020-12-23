@@ -33,7 +33,14 @@ object Constants {
     const val FCM_TOKEN_UPDATED = "fcmTokenUpdated"
     const val FCM_TOKEN = "fcmToken"
 
-
+    const val FCM_BASE_URL:String = "https://fcm.googleapis.com/fcm/send"
+    const val FCM_AUTHORIZATION:String = "authorization"
+    const val FCM_KEY:String = "key"
+    const val FCM_SERVER_KEY:String = "AAAAbtxHpKM:APA91bHhGjmnQp9YnqxPY3b6XjgbgkHS8rdMepc5yDbLK8p6fmq9yolxpfHoKp_AVBUYLEl76H3Y7jnexIPm5B4CuyDW1mt5nBdX3XHG6O828mLCCgOftiZ0zK9I928giAwVWKmn0Caa"
+    const val FCM_KEY_TITLE:String = "title"
+    const val FCM_KEY_MESSAGE:String = "message"
+    const val FCM_KEY_DATA:String = "data"
+    const val FCM_KEY_TO:String = "to"
 
     //TODO refactor
     fun colorsList():ArrayList<String> {
