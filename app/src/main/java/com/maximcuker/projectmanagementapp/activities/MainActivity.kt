@@ -1,7 +1,9 @@
 package com.maximcuker.projectmanagementapp.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -11,6 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.messaging.FirebaseMessaging
 import com.maximcuker.projectmanagementapp.R
 import com.maximcuker.projectmanagementapp.adapters.BoardItemsAdapter
 import com.maximcuker.projectmanagementapp.firebase.FirestoreClass
@@ -28,7 +33,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         const val MY_PROFILE_REQUEST_CODE:Int = 11
         const val CREATE_BOARD_REQUEST_CODE:Int = 12
     }
+
     private lateinit var mUserName:String
+    private lateinit var mSharedPreferences:SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +43,17 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         setupActionBar()
         nav_view.setNavigationItemSelectedListener(this)
+
+        mSharedPreferences = this.getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE)
+        val tokenUpdated = mSharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
+        if (tokenUpdated) {
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FirestoreClass().loadUserData(this, true)
+        } else {
+            FirebaseMessaging.getInstance().token.addOnSuccessListener(this) { it->
+                updateFcmToken(it)
+            }
+        }
 
         FirestoreClass().loadUserData(this, true)
 
@@ -48,6 +66,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     fun fillBoardsListToUI(boards: ArrayList<Board>) {
         hideProgressDialog()
+
         if (boards.size > 0) {
             rv_boards_list.visibility = View.VISIBLE
             tv_no_boards_available.visibility = View.GONE
@@ -105,6 +124,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.nav_sign_out -> {
                 FirebaseAuth.getInstance().signOut()
 
+                mSharedPreferences.edit().clear().apply()
+
                 val intent = Intent(this, IntroActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
@@ -127,6 +148,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun updateNavigationUserDetails(user: User,readBoardsList:Boolean) {
+        hideProgressDialog()
         mUserName = user.name
         Glide.with(this).load(user.image).centerCrop().placeholder(R.drawable.ic_user_place_holder).into(nav_user_image)
         tv_username.text = user.name
@@ -135,5 +157,22 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             FirestoreClass().getBoardsList(this)
         }
     }
+
+    fun tokenUpdateSuccess() {
+        hideProgressDialog()
+        val editor: SharedPreferences.Editor = mSharedPreferences.edit()
+        editor.putBoolean(Constants.FCM_TOKEN_UPDATED,true)
+        editor.apply()
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().loadUserData(this,true)
+    }
+
+    private fun updateFcmToken(token:String) {
+        val userHashMap = HashMap<String, Any>()
+        userHashMap[Constants.FCM_TOKEN] = token
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().updateUserProfileData(this,userHashMap)
+    }
+
 
 }

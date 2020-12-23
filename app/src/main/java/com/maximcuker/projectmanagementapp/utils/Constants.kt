@@ -11,8 +11,8 @@ object Constants {
 
     const val USERS: String = "users"
     const val BOARDS: String = "boards"
-
     const val IMAGE: String = "image"
+
     const val NAME: String = "name"
     const val MOBILE: String = "mobile"
     const val ASSIGNED_TO: String = "assignedTo"
@@ -28,6 +28,12 @@ object Constants {
     const val BOARD_MEMBERS_LIST = "board_members_list"
     const val SELECT = "Select"
     const val UN_SELECT = "UnSelect"
+    const val APP_PREFERENCES = "AppPreferences"
+
+    const val FCM_TOKEN_UPDATED = "fcmTokenUpdated"
+    const val FCM_TOKEN = "fcmToken"
+
+
 
     //TODO refactor
     fun colorsList():ArrayList<String> {
