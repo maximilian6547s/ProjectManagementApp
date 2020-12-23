@@ -167,9 +167,16 @@ class TaskListActivity : BaseActivity() {
 
     }
 
-
     private fun removeLastElementOFTaskList() {
         mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)
+    }
+
+    fun updateCardsInTaskList(taskListPosition: Int, cards:ArrayList<Card>) {
+        removeLastElementOFTaskList()
+        mBoardDetails.taskList[taskListPosition].cards = cards
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().addUpdateTaskList(this,mBoardDetails)
     }
 
 }
